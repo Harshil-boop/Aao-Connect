@@ -1,0 +1,11 @@
+# Backend Dependencies
+node_modules/
+
+# Secrets (NEVER COMMIT)
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
