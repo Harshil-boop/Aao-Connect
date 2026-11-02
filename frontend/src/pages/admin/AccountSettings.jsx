@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CheckCircle2, AlertCircle, KeyRound, Shield } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
+import { apiFetch } from '../../utils/api';
 
 export default function AccountSettings() {
   const { token, admin } = useAdminAuth();
@@ -29,7 +30,7 @@ export default function AccountSettings() {
 
     setPasswordLoading(true);
     try {
-      const res = await fetch('/api/admin/change-password', {
+      const data = await apiFetch('/api/admin/change-password', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -41,12 +42,7 @@ export default function AccountSettings() {
         }),
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.message || 'Failed to change password');
-      }
-
-      setPasswordMessage({ type: 'success', text: 'Administrator password updated successfully in database!' });
+      setPasswordMessage({ type: 'success', text: data.message || 'Administrator password updated successfully in database!' });
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (err) {
       setPasswordMessage({ type: 'error', text: err.message });

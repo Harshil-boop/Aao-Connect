@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { formatIndianDateTime, getAvatarGradient, getInitials } from '../../utils/adminHelpers';
+import { getApiUrl } from '../../utils/api';
 
 export default function DashboardOverview({ onNavigateToApplicants }) {
   const { token } = useAdminAuth();
@@ -35,8 +36,8 @@ export default function DashboardOverview({ onNavigateToApplicants }) {
     setStatsLoading(true);
     try {
       const [statsRes, applicantsRes] = await Promise.all([
-        fetch('/api/admin/stats', { headers: { Authorization: `Bearer ${token}` } }),
-        fetch('/api/admin/applicants?limit=5&sortBy=newest', { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(getApiUrl('/api/admin/stats'), { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(getApiUrl('/api/admin/applicants?limit=5&sortBy=newest'), { headers: { Authorization: `Bearer ${token}` } }),
       ]);
 
       if (statsRes.ok) {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Mail, ArrowRight, Loader2, AlertCircle, KeyRound } from 'lucide-react';
 import { useAdminAuth } from '../context/AdminAuthContext';
+import { apiFetch } from '../utils/api';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -29,17 +30,11 @@ export default function AdminLogin() {
     setError(null);
 
     try {
-      const res = await fetch('/api/admin/login', {
+      const data = await apiFetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim(), password }),
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || 'Authentication failed.');
-      }
 
       login(data.token, data.admin);
       navigate('/admin-panel');

@@ -13,6 +13,8 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 
+import { apiFetch } from '../utils/api';
+
 export default function PublicForm() {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -150,7 +152,7 @@ export default function PublicForm() {
     setSubmitError(null);
 
     try {
-      const response = await fetch('/api/submissions', {
+      const data = await apiFetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -161,13 +163,6 @@ export default function PublicForm() {
         }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (data.errors) setErrors(data.errors);
-        throw new Error(data.message || 'Submission failed.');
-      }
-
       setSubmitSuccess({
         fullName: formData.fullName.trim(),
         email: formData.email.trim(),
@@ -176,6 +171,7 @@ export default function PublicForm() {
 
       setLastSubmittedHash(currentHash);
     } catch (err) {
+      if (err.errors) setErrors(err.errors);
       setSubmitError(err.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);

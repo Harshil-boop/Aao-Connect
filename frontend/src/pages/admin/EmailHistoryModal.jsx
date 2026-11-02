@@ -20,6 +20,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { formatIndianDateTime } from '../../utils/adminHelpers';
+import { getApiUrl } from '../../utils/api';
 
 export default function EmailHistoryModal({ isOpen, onClose, token }) {
   if (!isOpen) return null;
@@ -61,7 +62,7 @@ export default function EmailHistoryModal({ isOpen, onClose, token }) {
     setLoading(true);
     try {
       const statusParam = activeTab === 'all' ? '' : activeTab;
-      const res = await fetch(`/api/admin/emails/campaigns?page=${page}&limit=10&status=${statusParam}`, {
+      const res = await fetch(getApiUrl(`/api/admin/emails/campaigns?page=${page}&limit=10&status=${statusParam}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -95,7 +96,7 @@ export default function EmailHistoryModal({ isOpen, onClose, token }) {
         search: recipientSearch,
       });
 
-      const res = await fetch(`/api/admin/emails/campaigns/${auditingCampaign.id}/recipients?${params.toString()}`, {
+      const res = await fetch(getApiUrl(`/api/admin/emails/campaigns/${auditingCampaign.id}/recipients?${params.toString()}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -120,7 +121,7 @@ export default function EmailHistoryModal({ isOpen, onClose, token }) {
   const handleStopCampaign = async (campaignId) => {
     if (!window.confirm(`Are you sure you want to stop/cancel Campaign #${campaignId}? Future dispatches will be halted.`)) return;
     try {
-      const res = await fetch(`/api/admin/emails/campaigns/${campaignId}/cancel`, {
+      const res = await fetch(getApiUrl(`/api/admin/emails/campaigns/${campaignId}/cancel`), {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -140,7 +141,7 @@ export default function EmailHistoryModal({ isOpen, onClose, token }) {
   const handleDeleteCampaign = async (campaignId) => {
     if (!window.confirm(`Are you sure you want to permanently delete Campaign #${campaignId} and all associated delivery logs?`)) return;
     try {
-      const res = await fetch(`/api/admin/emails/campaigns/${campaignId}`, {
+      const res = await fetch(getApiUrl(`/api/admin/emails/campaigns/${campaignId}`), {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -159,7 +160,7 @@ export default function EmailHistoryModal({ isOpen, onClose, token }) {
   // Retry Failed Recipients
   const handleRetryFailed = async (campaignId) => {
     try {
-      const res = await fetch(`/api/admin/emails/campaigns/${campaignId}/retry`, {
+      const res = await fetch(getApiUrl(`/api/admin/emails/campaigns/${campaignId}/retry`), {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -199,7 +200,7 @@ export default function EmailHistoryModal({ isOpen, onClose, token }) {
     setIsUpdating(true);
     try {
       const targetTime = `${editScheduleDate}T${editScheduleTime}:00`;
-      const res = await fetch(`/api/admin/emails/campaigns/${editingCampaign.id}`, {
+      const res = await fetch(getApiUrl(`/api/admin/emails/campaigns/${editingCampaign.id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

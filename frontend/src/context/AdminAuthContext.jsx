@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getApiUrl } from '../utils/api';
 
 const AdminAuthContext = createContext(null);
 
@@ -18,7 +19,7 @@ export const AdminAuthProvider = ({ children }) => {
       }
 
       try {
-        const res = await fetch('/api/admin/me', {
+        const res = await fetch(getApiUrl('/api/admin/me'), {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { formatIndianDateTime, getAvatarGradient, getInitials } from '../../utils/adminHelpers';
+import { getApiUrl } from '../../utils/api';
 import EmailComposerModal from './EmailComposerModal';
 import EmailHistoryModal from './EmailHistoryModal';
 
@@ -129,7 +130,7 @@ export default function ApplicantsManagement() {
         page: '1',
         limit: '10000',
       });
-      const res = await fetch(`/api/admin/applicants?${params.toString()}`, {
+      const res = await fetch(getApiUrl(`/api/admin/applicants?${params.toString()}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -177,7 +178,7 @@ export default function ApplicantsManagement() {
         limit: String(limit),
       });
 
-      const res = await fetch(`/api/admin/applicants?${params.toString()}`, {
+      const res = await fetch(getApiUrl(`/api/admin/applicants?${params.toString()}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -212,7 +213,7 @@ export default function ApplicantsManagement() {
     if (!token) return;
     try {
       const params = new URLSearchParams({ search, dateFilter, monthFilter, sortBy });
-      const res = await fetch(`/api/admin/export?${params.toString()}`, {
+      const res = await fetch(getApiUrl(`/api/admin/export?${params.toString()}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -251,7 +252,7 @@ export default function ApplicantsManagement() {
     setEditError(null);
 
     try {
-      const res = await fetch(`/api/admin/applicants/${editingApplicant.id}`, {
+      const res = await fetch(getApiUrl(`/api/admin/applicants/${editingApplicant.id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -293,7 +294,7 @@ export default function ApplicantsManagement() {
       const targetId = deletingApplicant.id;
       const targetName = deletingApplicant.full_name;
 
-      const res = await fetch(`/api/admin/applicants/${targetId}`, {
+      const res = await fetch(getApiUrl(`/api/admin/applicants/${targetId}`), {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

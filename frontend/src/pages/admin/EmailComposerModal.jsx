@@ -14,6 +14,7 @@ import {
   Info,
   Check,
 } from 'lucide-react';
+import { getApiUrl } from '../../utils/api';
 
 export default function EmailComposerModal({
   isOpen,
@@ -83,7 +84,7 @@ export default function EmailComposerModal({
     const resolveCount = async () => {
       setCountingRecipients(true);
       try {
-        const res = await fetch('/api/admin/emails/resolve-count', {
+        const res = await fetch(getApiUrl('/api/admin/emails/resolve-count'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -136,7 +137,7 @@ export default function EmailComposerModal({
     setPreviewLoading(true);
     try {
       const sampleId = selectedApplicants[0]?.id || null;
-      const res = await fetch('/api/admin/emails/preview', {
+      const res = await fetch(getApiUrl('/api/admin/emails/preview'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -170,7 +171,7 @@ export default function EmailComposerModal({
     setErrorMessage(null);
     setIsSubmitting(true);
     try {
-      const res = await fetch('/api/admin/emails/send', {
+      const res = await fetch(getApiUrl('/api/admin/emails/send'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -221,7 +222,7 @@ export default function EmailComposerModal({
         throw new Error('Invalid date/time format.');
       }
 
-      const res = await fetch('/api/admin/emails/schedule', {
+      const res = await fetch(getApiUrl('/api/admin/emails/schedule'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

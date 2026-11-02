@@ -10,6 +10,7 @@ import {
   GraduationCap,
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
+import { getApiUrl } from '../../utils/api';
 
 export default function AdminLayout() {
   const { admin, logout, isAuthenticated, loading: authLoading, token } = useAdminAuth();
@@ -28,7 +29,7 @@ export default function AdminLayout() {
   // Fetch count for sidebar badge
   useEffect(() => {
     if (!token) return;
-    fetch('/api/admin/stats', { headers: { Authorization: `Bearer ${token}` } })
+    fetch(getApiUrl('/api/admin/stats'), { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.stats?.totalApplications !== undefined) {
